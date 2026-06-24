@@ -41,15 +41,37 @@ const sendSMS = async ({ recipient, message }) => {
 /**
  * Simula envío por Email
  */
+const nodemailer = require('nodemailer');
+
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.GMAIL_USER,
+    pass: process.env.GMAIL_APP_PASSWORD,
+  },
+});
+
 const sendEmail = async ({ recipient, subject, message }) => {
-  console.log(`[NOTIFICATION][EMAIL] → ${recipient} | Asunto: "${subject}" | Body: "${message}"`);
-  await delay(300);
+  console.log(`[NOTIFICATION][EMAIL] → ${recipient} | ${subject}`);
+  
+  await transporter.sendMail({
+    from: `"NeoLend Financial" <${process.env.GMAIL_USER}>`,
+    to: recipient,
+    subject: subject || 'Notificación NeoLend',
+    html: `
+      <div style="font-family: Arial, sans-serif; max-width: 500px; margin: 0 auto;">
+        <h2 style="color: #6366f1;">NeoLend Financial Corp</h2>
+        <p>${message}</p>
+        <hr/>
+        <small style="color: #94a3b8;">Este es un mensaje automático, no responder.</small>
+      </div>
+    `,
+  });
+
   return {
     channel: 'EMAIL',
-    provider: 'SendGrid API (simulado)',
-    recipient,
-    subject,
-    message_id: `EMAIL-${Date.now()}`,
+    provider: 'Gmail SMTP',
+    recipient: process.env.GMAIL_USER,
     status: 'SENT',
     sent_at: new Date().toISOString(),
   };
