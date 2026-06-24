@@ -22,8 +22,8 @@ const router = Router();
 
 // Validaciones comunes de desembolso
 const disbursementValidations = [
-  body('loan_id').isUUID().withMessage('loan_id debe ser un UUID válido'),
-  body('applicant_id').isUUID().withMessage('applicant_id debe ser un UUID válido'),
+  body('loan_id'),
+  body('applicant_id'),
   body('amount')
     .isFloat({ min: 1 })
     .withMessage('amount debe ser un número positivo'),

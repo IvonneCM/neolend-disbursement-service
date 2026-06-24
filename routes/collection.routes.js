@@ -33,7 +33,7 @@ router.get('/loan/:creditId', getLoanInstallments);
 router.post(
   '/payment',
   [
-    body('loan_id').isUUID().withMessage('loan_id debe ser un UUID válido'),
+    body('loan_id'),
     body('amount').isFloat({ min: 0.01 }).withMessage('amount debe ser positivo'),
   ],
   registerPayment
@@ -45,7 +45,7 @@ router.post(
 router.post(
   '/payment-agreement',
   [
-    body('loan_id').isUUID().withMessage('loan_id debe ser un UUID válido'),
+    body('loan_id'),
     body('agreement_type')
       .optional()
       .isIn(['PAYMENT_PLAN', 'RESTRUCTURE', 'GRACE_PERIOD'])
@@ -60,13 +60,14 @@ router.post(
 router.post(
   '/restructure',
   [
-    body('loan_id').isUUID().withMessage('loan_id debe ser un UUID válido'),
+    body('loan_id'),
     body('new_term_months').isInt({ min: 1 }).withMessage('new_term_months debe ser entero positivo'),
     body('new_principal').isFloat({ min: 1 }).withMessage('new_principal debe ser positivo'),
   ],
   restructureLoan
 );
 
+router.get('/loan-by-user/:userId', getLoanByUserId);
 // ──────────────────────────────────────────────────────────────
 // POST /api/collections/report-to-bureau
 // ──────────────────────────────────────────────────────────────
@@ -78,7 +79,7 @@ router.post('/report-to-bureau', reportToBureau);
 router.post(
   '/generate-installments',
   [
-    body('loan_id').isUUID().withMessage('loan_id debe ser un UUID válido'),
+    body('loan_id'),
     body('principal').isFloat({ min: 1 }).withMessage('principal debe ser positivo'),
     body('term_months').isInt({ min: 1 }).withMessage('term_months debe ser entero positivo'),
   ],
