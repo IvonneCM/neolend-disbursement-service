@@ -1,18 +1,18 @@
 const express = require('express');
 const cors = require('cors');
-require('dotenv').config({ path: '../.env' });
+require('dotenv').config({ path: './.env' });
 
 // ── Importación de rutas ────────────────────────────
 const notificationRoutes = require('./routes/notification.routes');
-const disbursementRoutes = require('./routes/disbursement.routes'); // 👈 Importación nueva
-const collectionRoutes = require('./routes/collection.routes');     // 👈 Importación nueva
+const disbursementRoutes = require('./routes/disbursement.routes'); //
+const collectionRoutes = require('./routes/collection.routes');     //
 
 const sequelize = require('./database/config');
 require('./models/Notification');
-// 💡 Nota: Si tienes modelos para disbursements y collections, 
-// también deberías requerirlos aquí para que Sequelize los sincronice.
-// require('./models/Disbursement');
-// require('./models/Collection');
+require('./models/Disbursement');
+require('./models/Installment');  
+require('./models/Payment');
+require('./models/PaymentAgreement');
 
 const app = express();
 
