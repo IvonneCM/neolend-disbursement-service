@@ -18,6 +18,7 @@ const {
   restructureLoan,
   reportToBureau,
   generateInstallments,
+  getLoanByUserId,
 } = require('../controllers/CollectionController');
 
 const router = Router();

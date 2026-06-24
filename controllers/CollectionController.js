@@ -102,15 +102,20 @@ const registerPayment = async (req, res) => {
 const getLoanByUserId = async (req, res) => {
   const { userId } = req.params;
   try {
+    const sequelize = require('../database/config');
     const [result] = await sequelize.query(`
-      SELECT l.id as loan_id, l.approved_amount, l.interest_rate, 
-             l.term_months, l.status, ca.id as application_id
+      SELECT 
+        l.id            AS loan_id,
+        l.approved_amount,
+        l.interest_rate,
+        l.term_months,
+        l.status,
+        a.id            AS applicant_id
       FROM auth.users u
-      JOIN applicant.applicants a        ON a.user_id = u.id
-      JOIN credit.credit_applications ca ON ca.applicant_id = a.id
-      JOIN credit.loans l                ON l.application_id = ca.id
+      JOIN applicant.applicants a          ON a.user_id = u.id
+      JOIN credit.credit_applications ca   ON ca.applicant_id = a.id
+      JOIN credit.loans l                  ON l.application_id = ca.id
       WHERE u.id = :userId
-        AND ca.status IN ('APPROVED', 'DISBURSED')
         AND l.status = 'ACTIVE'
       LIMIT 1
     `, {
